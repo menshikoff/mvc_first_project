@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Карточка читателя</title>
+</head>
+<body>
+<br/>
+<br/>
+
+<div/>
+<a th:text="${person.getName()} + ', ' + ${person.getYear()}">user</a>
+</div>
+
+<hr/>
+<p th:if="${books.size()} != 0">
+    <b>Книги: </b>
+</p>
+
+<p th:if="${books.size()} == 0">
+    <b>Человек пока не взял ни одной книги: </b>
+</p>
+<div th:each="book : ${books}">
+
+    <a th:href="@{/books/{bookid}(bookid=${book.getBookid()})}"
+       th:text="${book.getName()} + ', ' + ${book.getAuthor()} + ', ' + ${book.getYear()}">book</a>
+</div>
+<hr/>
+<br/>
+<form th:method="GET" th:action="@{/people/{personid}/edit(personid=${person.getPersonid()})}">
+<button>Редактировать</button>
+</form>
+<p/>
+<form th:method="DELETE" th:action="@{/people/{personid}(personid=${person.getPersonid()})}">
+    <button>Удалить</button>
+</form>
+
+
+</body>
+</html>

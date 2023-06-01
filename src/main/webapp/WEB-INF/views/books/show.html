@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Страница книги</title>
+</head>
+<body>
+<br/>
+<br/>
+
+<div/>
+
+<a th:text="${book.getName()} + ', ' +
+            ${book.getAuthor()} + ', ' +
+            ${book.getYear()}">user</a>
+</div>
+
+<hr/>
+
+<form th:if="${book.getPersonid()} == null"
+      th:method="PATCH"
+      th:action="@{/books/assign/{bookid}(bookid=${book.getBookid()})}">Эта книга свободна. Кому ее назначить?
+
+  <table>
+    <tr>
+      <td>
+      <p>Выберете человека: </p>
+      </td>
+      <td>
+        <select th:object="${person}" th:field="*{personid}">
+          <option th:each="person : ${people}"
+              th:value="${person.getPersonid()}"
+              th:text="${person.getName()}">
+          </option>
+        </select>
+      </td>
+      <td>
+        <button type="submit">
+          Назначить
+        </button>
+      </td>
+    </tr>
+  </table>
+</form>
+
+<form th:if="${book.getPersonid()} != null"
+      th:method="PATCH"
+      th:action="@{/books/unassigned/{bookid}(bookid=${book.getBookid()})}">
+  <tr>
+    <td>Эта книга сейчас у: </td>
+    <td     th:each="person : ${people}"
+            th:if="${person.getPersonid()} == ${book.getPersonid()}"
+            th:text="${person.getName()}">Имя читателя</td>
+  </tr>
+  <br>
+  <button type="submit">Освободить</button>
+
+
+</form>
+<hr/>
+
+<br/>
+<form th:method="GET" th:action="@{/books/{bookid}/edit(bookid=${book.getBookid()})}">
+  <button>Редактировать</button>
+</form>
+<p/>
+<form th:method="DELETE" th:action="@{/books/{bookid}(bookid=${book.getBookid()})}">
+  <button>Удалить</button>
+</form>
+
+
+</body>
+</html>
