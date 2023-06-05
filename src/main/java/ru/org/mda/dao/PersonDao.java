@@ -8,6 +8,7 @@ import ru.org.mda.models.Book;
 import ru.org.mda.models.Person;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class PersonDao {
@@ -31,6 +32,11 @@ public class PersonDao {
         return jdbcTemplate.query("SELECT * FROM Person WHERE personid=?",
                         new BeanPropertyRowMapper<>(Person.class), personid).stream()
                                 .findAny().orElse(null);
+    }
+
+    public Optional<Person> show(String name) {
+        return jdbcTemplate.query("SELECT * FROM Person WHERE name=?", new BeanPropertyRowMapper<>(Person.class),
+                new Object[] {name}).stream().findAny();
     }
 
     public void update(int personid, Person updatedPerson) {

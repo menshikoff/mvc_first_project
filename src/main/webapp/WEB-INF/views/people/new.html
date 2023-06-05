@@ -10,9 +10,11 @@
 
     <label for="person_name"/>Введите ФИО: </label>
     <input type="text" th:field="*{name}" id="person_name"/>
+    <div style="color: crimson" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Error</div>
     <br/>
     <label for="year"/>Введите год рождения: </label>
     <input type="text" th:field="*{year}" id="year"/>
+    <div style="color: crimson" th:if="${#fields.hasErrors('year')}" th:errors="*{year}">Error</div>
     <br/>
 
     <button type="submit" >Добавить</button>

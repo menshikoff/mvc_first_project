@@ -3,19 +3,26 @@ package ru.org.mda.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.org.mda.dao.PersonDao;
 import ru.org.mda.models.Person;
+import ru.org.mda.util.PersonValidator;
+
+import javax.validation.Valid;
+
 
 @Controller
 @RequestMapping("people")
 public class People {
 
     private PersonDao personDao;
+    private PersonValidator personValidator;
 
     @Autowired
-    public People(PersonDao personDao) {
+    public People(PersonDao personDao, PersonValidator personValidator) {
         this.personDao = personDao;
+        this.personValidator = personValidator;
     }
 
     @GetMapping
@@ -37,10 +44,15 @@ public class People {
     }
 
     @PostMapping
-    public String create(@ModelAttribute("person") Person person) {
+    public String create(@ModelAttribute("person") @Valid Person person,
+                         BindingResult bindingResult) {
+        personValidator.validate(person, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            return "people/new";
+        }
 
         personDao.save(person);
-
         return "redirect:/people";
     }
 
